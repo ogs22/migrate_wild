@@ -23,6 +23,7 @@ class SourceParser {
         $this->html = $html;
         $this->migration = $migration;
 
+        $this->stripnav();
         $this->charTransform();
         $this->fixEncoding();
         $this->wrapHTML();
@@ -30,9 +31,17 @@ class SourceParser {
         $this->rewriteHref($id);
         $this->initQP();
         $this->stripComments();
+        
     }
 
-    /**
+    protected function stripnav() {
+        $this->html = preg_replace('/<nav.*\/nav>/s', '', $this->html);
+            $this->html = preg_replace('/<footer.*\/footer>/s', '', $this->html);
+
+        
+    }
+
+        /**
      * Replace characters.
      */
     protected function charTransform() {
@@ -60,12 +69,12 @@ class SourceParser {
      * Wrap an HTML fragment in the correct head/meta tags so that UTF-8 is
      * correctly detected, and for the parsers and tidiers.
      */
-    protected function wrapHTML() {
+    protected function wrapHTML() {       
         // We add surrounding <html> and <head> tags.
-        $html = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
-        $html .= '<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body>';
-        $html .= $this->html;
-        $html .= '</body></html>';
+    //    $html = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
+     //   $html .= '<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body>';
+        $html = $this->html;
+      //  $html .= '</body></html>';
         // Specify configuration
         $config = array(
            'indent'         => false,
@@ -82,46 +91,20 @@ class SourceParser {
 
     protected function rewriteSrc($id) {
         //change the local links and files 
-        //change images and PDFs to /sites/maths/files/pre2014/.....
-        //make sure local html links work by truning off pathauto module
         $path_parts = pathinfo($id);
         $html = $this->html;
         $html = str_ireplace('src="http', 'src-protect="http', $html); // stop ext links being rewriten
-        $html = str_ireplace('src="/', 'src-protect="/', $html); // stop / links being rewritten
-        $html = str_ireplace('src="', 
-        'src="/sites/www.maths.cam.ac.uk/files/pre2014/'.$this->migration->partimp.'/'.$path_parts['dirname'].'/',
-         $html); //rewrite paths
+        
+        $html = str_ireplace('src="/media/', 'src="/sites/wild.local/files/media/', $html); // 
+        $html = str_ireplace('src="/static/', 'src="/sites/wild.local/files/static/', $html); // 
+
         $html = str_replace('src-protect=', 'src=', $html); // rewrite protected srcs
 
         $this->html = $html;
     }
 
     protected function rewriteHref($id) {
-        $path_parts = pathinfo($id);
-        $html = $this->html;
-        $html = str_ireplace('href="mailto:', 'href-protect="mailto:', $html); // stop mailto links being rewriten
-        $html = str_ireplace('href="http', 'href-protect="http', $html); // stop external links being rewriten
-        $html = str_ireplace('href="/', 'href-protect="/', $html); // stop absolute links being rewritten
-        $html = preg_replace('/<a(.*)href="([^"]*pdf)"(.*)>/i',
-            '<a$1href-protect="/sites/www.maths.cam.ac.uk/files/pre2014/'.$this->migration->partimp.'/'.$path_parts['dirname'].'/$2"$3>',$html); //convert relative html links
-       $html = preg_replace('/<a(.*)href="([^"]*ps)"(.*)>/i',
-            '<a$1href-protect="/sites/www.maths.cam.ac.uk/files/pre2014/'.$this->migration->partimp.'/'.$path_parts['dirname'].'/$2"$3>',$html); //convert relative html links
-       $html = preg_replace('/<a(.*)href="([^"]*doc)"(.*)>/i',
-            '<a$1href-protect="/sites/www.maths.cam.ac.uk/files/pre2014/'.$this->migration->partimp.'/'.$path_parts['dirname'].'/$2"$3>',$html); //convert relative html links
 
-
-
-        $html = preg_replace('/<a(.*)href="([^"]*html)"(.*)>/i',
-            '<a$1href-protect="/'.$this->migration->partimp.'/'.$path_parts['dirname'].'/$2"$3>',$html); //convert relative html links
-        $html = preg_replace('/<a(.*)href="([^"]*#*)"(.*)>/i',
-            '<a$1href-protect="/'.$this->migration->partimp.'/'.$path_parts['dirname'].'/$2"$3>',$html); //convert anchors too
-        
-
-        $html = preg_replace('/<a(.*)href="([^"]*)"(.*)>/i',
-            '<a$1href-protect="/sites/www.maths.cam.ac.uk/files/pre2014/'.$this->migration->partimp.'/'.$path_parts['dirname'].'/$2"$3>',
-            $html); //assume all else is pdf/doc etc stored in /sites/www.maths.cam.ac.uk/files/pre2014/
-        $html = str_replace('href-protect="', 'href="', $html);  
-        $this->html = $html;
     }
 
     /**

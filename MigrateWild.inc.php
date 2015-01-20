@@ -2,7 +2,7 @@
 
 class MigrateWild extends Migration {
   public $base_dir;
-  public $partimp = '';
+  //public $partimp = '';
   public $maindir = '/Users/ogs22/importwild/wild.maths.org';
   /**
    * Constructor.
@@ -28,7 +28,7 @@ class MigrateWild extends Migration {
       'facpath' => t('the path')
     );
 
-    $this->base_dir = $this->maindir.$this->partimp;
+    $this->base_dir = $this->maindir;
 
     // Match HTML files.
     $regex = '/(?!(catam|madeup)).*\.htm/';
@@ -64,7 +64,7 @@ class MigrateWild extends Migration {
     $row->body = $source_parser->getBody();
  
     // The title is the filename.
-    $row->facpath = $this->partimp.'/'.substr($row->sourceid,1);
+    $row->facpath = substr($row->sourceid,1);
 //    if (basename($row->sourceid) == "index.html") {
 //        $row->alt[1] = substr(dirname($row->sourceid),1);
 //    }
