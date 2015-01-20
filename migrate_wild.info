@@ -1,0 +1,14 @@
+name = "Migrate from Wild"
+description = "Module to migrate Python cms to drupal"
+package = "Migration"
+core = 7.x
+
+dependencies[] = "migrate"
+dependencies[] = "migrate_extras"
+
+
+#  include the files that contain your Migrate classes 
+files[] = migrate_wild.migrate.inc
+files[] = wildMigrateListFiles.inc.php
+files[] = source_parser.inc.php
+files[] = MigrateWild.inc.php
