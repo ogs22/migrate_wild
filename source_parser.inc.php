@@ -23,7 +23,7 @@ class SourceParser {
         $this->html = $html;
         $this->migration = $migration;
 
-        $this->stripnav();
+        $this->stripstuff();
         $this->charTransform();
         $this->fixEncoding();
         $this->wrapHTML();
@@ -34,14 +34,56 @@ class SourceParser {
         
     }
 
-    protected function stripnav() {
-        $this->html = preg_replace('/<nav.*\/nav>/s', '', $this->html);
-            $this->html = preg_replace('/<footer.*\/footer>/s', '', $this->html);
+    protected function stripstuff() {
 
+        $this->html = preg_replace('/<\!-- analytics.*\/script>/s', '', $this->html);
+        //$this->html = preg_replace('/<div class="title">([^<>]*)<\/div>/s', '<h1 class="import">$1</h1>', $this->html);
+        $this->html = preg_replace('/<span[^<>]*>/','<span>',$this->html);
+        $this->html = preg_replace('/<span>/','',$this->html);
+        $this->html = preg_replace('/<\/span>/','',$this->html);
+
+        include_once('simple_html_dom.php');
+        $html = $this->html;
         
+        $x = str_get_html($html);
+        
+        foreach($x->find('div[class*="col-*"]') as $e) {
+            $e->class = '';
+        }
+        foreach($x->find('style') as $e) {
+            $e->outertext = '';
+        }
+        foreach($x->find('nav') as $e) {
+            $e->outertext = '';
+        }
+        foreach($x->find('footer') as $e) {
+            $e->outertext = '';
+        }
+        foreach($x->find('div[class*="page-break"]') as $e) {
+            $e->outertext = '<hr/>';
+        }
+        foreach($x->find('div[class*="title"]') as $e) {
+            $in = $e->innertext;
+            if (trim($e->innertext) == ''){
+                $e->outertext = null;
+            } else {
+                $e->outertext = '<h1 class="import">'.$in.' </h1>';
+            }
+        }
+        
+        foreach($x->find('div') as $e) {
+            if(trim($e->innertext) == '') {
+                $e->outertext = '';
+            }
+        }
+        
+        $this->html = $x;
+    }
+    
+    public function poststrip() {
     }
 
-        /**
+    /**
      * Replace characters.
      */
     protected function charTransform() {
@@ -79,6 +121,7 @@ class SourceParser {
         $config = array(
            'indent'         => false,
            'output-xhtml'   => true,
+            'clean'         => true,
            'wrap'           => 400);
 
         // Tidy
@@ -133,7 +176,7 @@ class SourceParser {
      */
     public function getBody() {
         $body = $this->qp->top('body')->innerHTML();
-        $body = trim($body);
+        $body = trim($body);       
         return $body;
     }
 

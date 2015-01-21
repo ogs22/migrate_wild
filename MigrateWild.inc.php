@@ -61,7 +61,6 @@ class MigrateWild extends Migration {
  
     // Create a new SourceParser to handle HTML content.
     $source_parser = new SourceParser(substr($row->sourceid, 1), $row->filedata,$this);
-    $row->body = $source_parser->getBody();
  
     // The title is the filename.
     $row->facpath = substr($row->sourceid,1);
@@ -73,6 +72,15 @@ class MigrateWild extends Migration {
     if ($row->title == "") {
         $row->title = $row->sourceid;
     }
+    
+    //remove h1s
+    
+    
+    $body = $source_parser->getBody();
+    $row->body = preg_replace('/<h1 class="import">.*<\/h1>/', '', $body);
+
+    
+    
   }
 }
 
