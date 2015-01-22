@@ -25,7 +25,10 @@ class MigrateWild extends Migration {
       'title' => t('Title'),
       'body' => t('Body'),
       'uid' => t('User id'),
-      'facpath' => t('the path')
+      'facpath' => t('the path'),
+      'tags' => t('field page tags'),
+        'ct' => t('creta tags?'),
+        'ic' => t ('ignore case of tag')
     );
 
     $this->base_dir = $this->maindir;
@@ -47,8 +50,11 @@ class MigrateWild extends Migration {
     $this->addFieldMapping('body', 'body')
       ->arguments(array('format' => 'full_html'));
     $this->addFieldMapping('path', 'facpath');
-    $this->addFieldMapping('pathauto', FALSE);
-    
+    $this->addFieldMapping('pathauto', TRUE);
+    $this->addFieldMapping('field_page_tags', 'tags');
+    $this->addFieldMapping('field_page_tags:create_term','ct');
+    $this->addFieldMapping('field_page_tags:ignore_case','ic');
+
   }
  
   /**
@@ -68,7 +74,14 @@ class MigrateWild extends Migration {
 //        $row->alt[1] = substr(dirname($row->sourceid),1);
 //    }
     
-    $row->title = $source_parser->getTitle($this->base_dir,$row->facpath);
+    $row->ct = TRUE;
+    $row->ic = TRUE;
+    $tmp = explode('/',  dirname($row->sourceid));
+    //$tags = join(',', $tmp);
+    $row->tags = $tmp[1];
+    
+    //$row->title = $source_parser->getTitle($this->base_dir,$row->facpath);
+    $row->title = $source_parser->toph1;
     if ($row->title == "") {
         $row->title = $row->sourceid;
     }
@@ -77,7 +90,9 @@ class MigrateWild extends Migration {
     
     
     $body = $source_parser->getBody();
-    $row->body = preg_replace('/<h1 class="import">.*<\/h1>/', '', $body);
+    $body = preg_replace('/<h1 class="import">.*<\/h1>/', '', $body);
+    $row->body = preg_replace('/<h1 class="import"\/>/', '', $body);
+
 
     
     

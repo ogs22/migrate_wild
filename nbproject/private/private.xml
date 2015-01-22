@@ -3,13 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/www/cms/drupal/sites/wild.local/modules/migrate_wild/wildMigrateListFiles.inc.php</file>
-            <file>file:/www/cms/drupal/sites/wild.local/modules/migrate_wild/migrate_wild.migrate.inc</file>
-            <file>file:/www/cms/drupal/sites/wild.local/modules/migrate_wild/urls.php</file>
-            <file>file:/www/cms/drupal/sites/wild.local/modules/migrate_wild/MigrateWild.inc.php</file>
-            <file>file:/www/cms/drupal/sites/wild.local/modules/migrate_wild/source_parser.inc.php</file>
-            <file>file:/www/cms/drupal/sites/wild.local/modules/migrate_wild/migrate_wild.module</file>
-            <file>file:/www/cms/drupal/sites/wild.local/modules/migrate_wild/migrate_wild.info</file>
+            <file>file:/usr/local/www/cms/drupal/sites/wild.local/modules/migrate_wild/simple_html_dom.php</file>
+            <file>file:/usr/local/www/cms/drupal/sites/wild.local/modules/migrate_wild/MigrateWild.inc.php</file>
+            <file>file:/usr/local/www/cms/drupal/sites/wild.local/modules/migrate_wild/pre-import-cleanup.sh</file>
+            <file>file:/usr/local/www/cms/drupal/sites/wild.local/modules/migrate_wild/migrate_wild.migrate.inc</file>
+            <file>file:/usr/local/www/cms/drupal/sites/wild.local/modules/migrate_wild/migrate_wild.info</file>
+            <file>file:/usr/local/www/cms/drupal/sites/wild.local/modules/migrate_wild/migrate_wild.module</file>
+            <file>file:/usr/local/www/cms/drupal/sites/wild.local/modules/migrate_wild/source_parser.inc.php</file>
         </group>
     </open-files>
 </project-private>

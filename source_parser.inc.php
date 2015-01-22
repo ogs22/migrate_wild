@@ -47,8 +47,10 @@ class SourceParser {
         
         $x = str_get_html($html);
         
+
         foreach($x->find('div[class*="col-*"]') as $e) {
-            $e->class = '';
+            $e->class = null;
+            //$e->outertext = $e->innertext;
         }
         foreach($x->find('style') as $e) {
             $e->outertext = '';
@@ -67,13 +69,34 @@ class SourceParser {
             if (trim($e->innertext) == ''){
                 $e->outertext = null;
             } else {
-                $e->outertext = '<h1 class="import">'.$in.' </h1>';
+                if ($this->toph1 == "") {
+                    $this->toph1 = strip_tags(trim($in));
+                }
+                //$e->outertext = '<h1 class="import">'.$in.'</h1>';
+                $e->outertext="";
             }
         }
+        
+        foreach($x->find('div[data-parallax]') as $e) {
+            $e->outertext = $e->innertext;
+        }
+        foreach($x->find('div[class*="row"]') as $e) {
+            $e->outertext = $e->innertext;
+        }
+        
+        foreach($x->find('div[class*=""]') as $e) {
+            $e->class = null;
+        }
+        
+        $y = $x;
+        
+        $x = str_get_html($y);
         
         foreach($x->find('div') as $e) {
             if(trim($e->innertext) == '') {
                 $e->outertext = '';
+            } else {
+                $e->outertext = $e->innertext;
             }
         }
         
@@ -119,7 +142,7 @@ class SourceParser {
       //  $html .= '</body></html>';
         // Specify configuration
         $config = array(
-           'indent'         => false,
+           'indent'         => true,
            'output-xhtml'   => true,
             'clean'         => true,
            'wrap'           => 400);
