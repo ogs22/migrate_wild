@@ -47,7 +47,11 @@ class SourceParser {
         
         $x = str_get_html($html);
         
-
+        foreach($x->find('div[class*="modal"]') as $e) {
+            $e->class = 'protected';
+            //$e->innertext = $e->innertext."XXXX";
+        }
+        
         foreach($x->find('div[class*="col-*"]') as $e) {
             $e->class = null;
             //$e->outertext = $e->innertext;
@@ -92,7 +96,7 @@ class SourceParser {
         
         $x = str_get_html($y);
         
-        foreach($x->find('div') as $e) {
+        foreach($x->find('div[class!="modal"') as $e) {
             if(trim($e->innertext) == '') {
                 $e->outertext = '';
             } else {
@@ -161,8 +165,8 @@ class SourceParser {
         $html = $this->html;
         $html = str_ireplace('src="http', 'src-protect="http', $html); // stop ext links being rewriten
         
-        $html = str_ireplace('src="/media/', 'src="/sites/wild.local/files/media/', $html); // 
-        $html = str_ireplace('src="/static/', 'src="/sites/wild.local/files/static/', $html); // 
+        $html = str_ireplace('src="/media/', 'src="/sites/wild.maths.org/files/media/', $html); // 
+        $html = str_ireplace('src="/static/', 'src="/sites/wild.maths.org/files/static/', $html); // 
 
         $html = str_replace('src-protect=', 'src=', $html); // rewrite protected srcs
 
